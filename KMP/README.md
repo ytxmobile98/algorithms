@@ -73,6 +73,74 @@ An example of the `lps[]` construction:
 | `AAACAAAAAC` | `[0, 1, 2, 0, 1, 2, 3, 3, 3, 4]` |
 | `AAABAAA` | `[0, 1, 2, 0, 1, 2, 3]` |
 
+#### The Preprocessing Algorithm
+
+* Calculate values in `lps[]`. We keep track of the length of the longest prefix suffix value (the `len` variable) for the previous index.
+* Initialize `lps[0]` and `len` as 0.
+* If `pat[len]` and `pat[i]` match, we increment `len` by 1 and assign the incremented value to `lps[i]`.
+* If `pat[i]` and `pat[len]` do not match and `len` is not 0, we update `len` to `lps[len-1]`.
+
+Illustration of preprocessing: `pat[] = AAACAAAA`
+
+```
+pat[] = "AAACAAAA"
+
+Step 0: len = 0, i = 0
+    → lps[0] = 0
+
+Step 1: len = 1, i = 2
+    Since pat[len] == pat[i], do len++
+    store len in lps[i], do i++
+    → len = 1, lps[1] = 1, i = 2
+
+Step 2: len = 1, i = 2
+    Since pat[len] == pat[i], do len++
+    store len in lps[i], do i++
+    → len = 2, lps[2] = 2, i = 3
+
+Step 3: len = 2, i = 3
+    Since pat[len] != pat[i], and len > 0
+    → len = lps[len-1] = lps[1] = 1
+
+Step 4: len = 1, i = 3
+    Since pat[len] != pat[i], and len > 0
+    → len = lps[len-1] = lps[0] = 0
+
+Step 5: len = 0, i = 3
+    Since pat[len] != pat[i], and len == 0
+    → lps[3] = 0, i = 4
+
+Step 6: len = 0, i = 4
+    Since pat[len] == pat[i], do len++
+    store len in lps[i], do i++
+    → len = 1, lps[4] = 1, i = 5
+
+Step 7: len = 1, i = 5
+    Since pat[len] != pat[i], and len > 0
+    store len in lps[i], do i++
+    → len = 2, lps[5] = 2, i = 6
+
+Step 8: len = 2, i = 6
+    Since pat[len] != pat[i], and len > 0
+    store len in lps[i], do i++
+    → len = 3, lps[6] = 3, i = 7
+
+Step 9: len = 3, i = 7
+    Since pat[len] != pat[i], and len > 0
+    → len = lps[len-1] = lps[2] = 2
+
+Step 10: len = 2, i = 7
+    Since pat[len] != pat[i], and len > 0
+    store len in lps[i], do i++
+    → len = 3, lps[7] = 3, i = 8
+
+The lps[] is as follows:
+--------------------------------
+ i       0  1  2  3  4  5  6  7
+ lps[i]  0  1  2  0  1  2  3  3
+--------------------------------
+```
+
 ## References
 
 * [GeeksForGeeks: KMP Algorithm for Pattern Searching](https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/)
