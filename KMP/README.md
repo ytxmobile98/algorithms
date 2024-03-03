@@ -2,7 +2,7 @@
 
 ## Problem Description
 
-Given a text `txt[0...n-1]` and a pattern `pat[0..m-1]`, write a function `search(char pat[], char txt[])` that prints all occurrences of `pat[]` in `txt[]`. You may assume that `n > m`.
+Given a text `txt[0…n-1]` and a pattern `pat[0…m-1]`, write a function `search(char pat[], char txt[])` that prints all occurrences of `pat[]` in `txt[]`. You may assume that `n > m`.
 
 ### Examples
 
@@ -54,11 +54,11 @@ The core issue is to know _how many characters to skip_. To know this we _pre-pr
     * Proper prefixes of "ABC" are "", "A" and "AB".
     * Suffixes of the string are "", "C", "BC", and "ABC".
 * We search for lps in sub-patterns. More clearly we focus on sub-strings of patterns that are both prefix and suffix.
-* For each sub-pattern `pat[0..i]` where `i = 0 to m-1`, `lps[i]` stores the **length of the maximum matching proper prefix** which is also a suffix of the sub-pattern `pat[0..i]`.
+* For each sub-pattern `pat[0…i]` where `i = 0 to m-1`, `lps[i]` stores the **length of the maximum matching proper prefix** which is also a suffix of the sub-pattern `pat[0…i]`.
 
     ```
-    lps[i] = the longest proper prefix of pat[0..i]
-             which is also a suffix of pat[0..i].
+    lps[i] = the longest proper prefix of pat[0…i]
+             which is also a suffix of pat[0…i].
     ```
 
 **Note:** `lps[i]` could also be defined as the longest prefix which is also a proper suffix. We need to use it properly in one place to make sure that the whole substring is not considered.
@@ -139,6 +139,44 @@ The lps[] is as follows:
  i       0  1  2  3  4  5  6  7
  lps[i]  0  1  2  0  1  2  3  3
 --------------------------------
+```
+
+### The KMP Algorithm
+
+After we complete preprocessing, we can use the `lps[]` values to decide the next characters to be matched, skipping the characters that we know will anyway match.
+
+* Let `i = 0` and `j = 0`. We start from comparing `pat[j]` with the characters of the current window of text.
+* We keep matching characters `txt[i]` and `pat[j]`, and keep incrementing `i` and `j` while `pat[j]` and `txt[i]` still match.
+* When a mismatch is found:
+    * We know that characters `pat[0…j-1]` match with `txt[i-j…i-1]` (Note that `j` starts with 0 and increments it only when there is a match).
+    * We also know that `lps[j-1]` is the count of characters of of `pat[0…j-1]` that are both prefix and suffix.
+    * From the above two points, we can conclude that we do not need to match these `lps[j-1]` characters with `txt[i-j…i-1]` because these characters will anyway match.
+
+Here is an illustration:
+
+```
+txt[] = "AAAAABAAABA"
+pat[] = "AAACAAAA"
+
+→ lps[] = [0, 1, 2, 3]
+
+0. i = 0, j = 0 → txt[i] == pat[j], i++, j++
+1. i = 1, j = 1 → txt[i] == pat[j], i++, j++
+2. i = 2, j = 2 → txt[i] == pat[j], i++, j++
+3. i = 3, j = 3 → txt[i] == pat[j], i++, j++
+4. i = 4, j = 4 → Since j == M, print "pattern found" and reset j, j = lps[j-1] = lps[3] = 3
+5. i = 4, j = 3 → txt[i] == pat[j], i++, j++
+6. i = 5, j = 4 → Since j == M, print "pattern found" and reset j, j = lps[j-1] = lps[3] = 3
+7. i = 5, j = 3 → txt[i] != pat[j], and j > 0, j = lps[j-1] = lps[2] = 2
+8. i = 5, j = 2 → txt[i] != pat[j], and j > 0, j = lps[j-1] = lps[1] = 1
+9. i = 5, j = 1 → txt[i] != pat[j], and j > 0, j = lps[j-1] = lps[1] = 0
+10. i = 5, j = 0 → txt[i] != pat[j], i++
+11. i = 6, j = 0 → txt[i] == pat[j], i++, j++
+12. i = 7, j = 1 → txt[i] == pat[j], i++, j++
+
+…………
+
+We continue this process till there are sufficient characters in the text to be compared with the characters in the pattern.
 ```
 
 ## References
