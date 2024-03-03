@@ -1,2 +1,3 @@
-# algorithms
-Algorithms
+# Algorithms
+
+* [KMP](./KMP/)
