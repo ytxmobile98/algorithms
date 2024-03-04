@@ -181,7 +181,7 @@ Here is an illustration:
 
 ```
 txt[] = "AAAAABAAABA"
-pat[] = "AAACAAAA"
+pat[] = "AAAA"
 
 → lps[] = [0, 1, 2, 3]
 
