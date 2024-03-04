@@ -204,6 +204,10 @@ pat[] = "AAAA"
 We continue this process till there are sufficient characters in the text to be compared with the characters in the pattern.
 ```
 
+## Code Example
+
+A code example written in C++ can be found in the [`main.cc`](./main.cc) file.
+
 ## References
 
 * [GeeksForGeeks: KMP Algorithm for Pattern Searching](https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/)
