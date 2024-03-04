@@ -177,6 +177,42 @@ After we complete preprocessing, we can use the `lps[]` values to decide the nex
     * We also know that `lps[j-1]` is the count of characters of of `pat[0…j-1]` that are both prefix and suffix.
     * From the above two points, we can conclude that we do not need to match these `lps[j-1]` characters with `txt[i-j…i-1]` because these characters will anyway match.
 
+The flowchart is as follows:
+
+```mermaid
+flowchart TD;
+
+Initialize --> Start(i = 0<br/>j = 0) --> C[Compute LPS] --> L
+
+subgraph Compute KMP
+    L[textLen = length of text<br/>patternLen = length of pattern]
+    L --> CheckMatch["pattern[j] == text[i] ?"]
+
+    CheckMatch -- Yes --> IncrementBoth["++i<br/>++j"] --> CheckEnd
+    CheckMatch -- No --> CheckEnd
+
+    CheckEnd["j == patternLen ?"]
+    CheckEnd -- Yes --> RecordResult[Record starting position: i - j]
+    CheckEnd -- No --> CheckMatch2["i < textLen && (pattern[j] != text[i]) ?"]
+    RecordResult --> EndStep
+
+    CheckMatch2 -- Yes --> CheckJ["j > 0 ?"]
+    CheckMatch2 -- No --> EndStep
+
+    CheckJ -- Yes --> UpdateJ["j = lps[j-1]"]
+    CheckJ -- No --> IncrementI["++i"]
+    UpdateJ --> EndStep
+    IncrementI --> EndStep
+
+    EndStep(End of Step)
+    EndStep --> CheckIJ["i < textLen && j < patternLen ?"]
+    CheckIJ -- Yes --> CheckMatch
+end;
+
+CheckIJ -- No --> ReturnResult
+ReturnResult("Return result")
+```
+
 Here is an illustration:
 
 ```
