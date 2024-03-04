@@ -61,6 +61,31 @@ The core issue is to know _how many characters to skip_. To know this we _pre-pr
              which is also a suffix of pat[0…i].
     ```
 
+The flowchart is as follows:
+
+```mermaid
+flowchart TD;
+
+Start -- Initialize --> Init(i = 0<br/>len = 0<br/>n = pattern length);
+Init --> CheckEqualChar
+
+subgraph "Preprocessing Step"
+    CheckEqualChar["pat[i] == pat[len] ?"]
+    CheckEqualChar -- Yes --> Yes["++len<br/>lps[i] = len<br/>++i"];
+    CheckEqualChar -- No --> CheckLen["len > 0 ?"];
+    Yes --> E(End of Step)
+
+    CheckLen -- Yes --> Yes2["len = lps[len-1]"];
+    CheckLen -- No --> No2["lps[i] = 0<br/>++i"];
+    Yes2 --> E
+    No2 --> E
+
+    E -- "i &lt; n" --> CheckEqualChar
+end;
+
+E -- i == n --> C(Complete)
+```
+
 **Note:** `lps[i]` could also be defined as the longest prefix which is also a proper suffix. We need to use it properly in one place to make sure that the whole substring is not considered.
 
 An example of the `lps[]` construction:
