@@ -61,6 +61,25 @@ The core issue is to know _how many characters to skip_. To know this we _pre-pr
              which is also a suffix of pat[0…i].
     ```
 
+**Note:** `lps[i]` could also be defined as the longest prefix which is also a proper suffix. We need to use it properly in one place to make sure that the whole substring is not considered.
+
+An example of the `lps[]` construction:
+
+| Pattern | `lps[]` |
+|---------|---------|
+| `AAAAA` | `[0, 1, 2, 3]` |
+| `ABCDE` | `[0, 0, 0, 0, 0]` |
+| `AABAACAABAA` | `[0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]` |
+| `AAACAAAAAC` | `[0, 1, 2, 0, 1, 2, 3, 3, 3, 4]` |
+| `AAABAAA` | `[0, 1, 2, 0, 1, 2, 3]` |
+
+#### The Preprocessing Algorithm
+
+* Calculate values in `lps[]`. We keep track of the length of the longest prefix suffix value (the `len` variable) for the previous index.
+* Initialize `lps[0]` and `len` as 0.
+* If `pat[len]` and `pat[i]` match, we increment `len` by 1 and assign the incremented value to `lps[i]`.
+* If `pat[i]` and `pat[len]` do not match and `len` is not 0, we update `len` to `lps[len-1]`.
+
 The flowchart is as follows:
 
 ```mermaid
@@ -85,25 +104,6 @@ end;
 
 E -- i == n --> C(Complete)
 ```
-
-**Note:** `lps[i]` could also be defined as the longest prefix which is also a proper suffix. We need to use it properly in one place to make sure that the whole substring is not considered.
-
-An example of the `lps[]` construction:
-
-| Pattern | `lps[]` |
-|---------|---------|
-| `AAAAA` | `[0, 1, 2, 3]` |
-| `ABCDE` | `[0, 0, 0, 0, 0]` |
-| `AABAACAABAA` | `[0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]` |
-| `AAACAAAAAC` | `[0, 1, 2, 0, 1, 2, 3, 3, 3, 4]` |
-| `AAABAAA` | `[0, 1, 2, 0, 1, 2, 3]` |
-
-#### The Preprocessing Algorithm
-
-* Calculate values in `lps[]`. We keep track of the length of the longest prefix suffix value (the `len` variable) for the previous index.
-* Initialize `lps[0]` and `len` as 0.
-* If `pat[len]` and `pat[i]` match, we increment `len` by 1 and assign the incremented value to `lps[i]`.
-* If `pat[i]` and `pat[len]` do not match and `len` is not 0, we update `len` to `lps[len-1]`.
 
 Illustration of preprocessing: `pat[] = AAACAAAA`
 
