@@ -204,6 +204,11 @@ pat[] = "AAAA"
 We continue this process till there are sufficient characters in the text to be compared with the characters in the pattern.
 ```
 
+## Complexity
+
+* Time complexity: Assume that the text length is `m` and the pattern length is `n`. Since it takes `n` steps to process the `lps[]` table, and `m` steps to find the pattern, the time complexity of the KMP algorithm is **O(n+m)** in the worst case.
+* Space complexity: The space complexity of the KMP algorithm is **O(n)**, where `n` is the length of the `lps[]` table that is equal to pattern length.
+
 ## Code Example
 
 A code example written in C++ can be found in the [`main.cc`](./main.cc) file.
